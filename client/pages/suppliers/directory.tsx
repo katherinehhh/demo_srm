@@ -15,6 +15,7 @@ import {
 } from '#components/ui/table';
 import { useListData } from '#hooks/use-list-data';
 import type { Supplier } from './model.js';
+import { SupplierExpiryBadge } from './expiry-badge.js';
 
 export default function SupplierDirectoryPage(): ReactElement {
   const { t } = useTranslation();
@@ -87,15 +88,7 @@ export default function SupplierDirectoryPage(): ReactElement {
                     {t(`suppliers.categories.${row.category}`)}
                   </TableCell>
                   <TableCell>
-                    <span
-                      className={
-                        row.expiryState === 'valid'
-                          ? 'text-muted-foreground'
-                          : 'font-medium text-destructive'
-                      }
-                    >
-                      {t(`suppliers.expiry.${row.expiryState ?? 'valid'}`)}
-                    </span>
+                    <SupplierExpiryBadge state={row.expiryState ?? 'valid'} />
                   </TableCell>
                   <TableCell>{row.contactName}</TableCell>
                   <TableCell>{row.contactPhone}</TableCell>

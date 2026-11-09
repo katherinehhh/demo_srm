@@ -13,6 +13,7 @@ import {
   TableRow,
 } from '#components/ui/table';
 import { useListData } from '#hooks/use-list-data';
+import { SupplierExpiryBadge } from './expiry-badge.js';
 
 interface ExpiringRow {
   id: string;
@@ -52,7 +53,14 @@ export default function SupplierExpiringPage(): ReactElement {
             </TableHeader>
             <TableBody>
               {request.data.data.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow
+                  key={row.id}
+                  className={
+                    row.expiryState === 'expired'
+                      ? 'bg-destructive/5 hover:bg-destructive/10'
+                      : 'bg-(--status-warning-background)/50 hover:bg-(--status-warning-background)'
+                  }
+                >
                   <TableCell>
                     <Link
                       className='font-medium text-primary hover:underline'
@@ -62,9 +70,19 @@ export default function SupplierExpiringPage(): ReactElement {
                     </Link>
                   </TableCell>
                   <TableCell>{row.typeCode}</TableCell>
-                  <TableCell>{row.validUntil}</TableCell>
                   <TableCell>
-                    {t(`suppliers.expiry.${row.expiryState}`)}
+                    <span
+                      className={
+                        row.expiryState === 'expired'
+                          ? 'font-semibold tabular-nums text-destructive'
+                          : 'font-semibold tabular-nums text-(--status-warning)'
+                      }
+                    >
+                      {row.validUntil}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <SupplierExpiryBadge state={row.expiryState} />
                   </TableCell>
                 </TableRow>
               ))}
