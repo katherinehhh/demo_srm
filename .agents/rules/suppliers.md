@@ -1,0 +1,11 @@
+# Supplier admission
+
+`supplierQualificationTypes` is the material catalog. `supplierAdmissionRules` is the active category policy; equipment, service and both are independent categories. A rule has one type code, required flag, validity-check flag and enabled flag. Every category must retain an enabled required rule.
+
+`supplierSubmissionSnapshots` stores one immutable policy and check result per successful submit, including resubmissions and renewals. Approval checks current proposed files and dates against the latest submission snapshot, never against live rules. A return followed by another submit uses the rules active at that new submission. Pre-feature pending records have a `migration-baseline` snapshot; it is not their original policy.
+
+The applicant checklist evaluates saved proposed materials. Browser edits are provisional until saved; the submit route is the authoritative check. A rule with `checkValidity=false` permits a missing date, though a provided date still contributes to directory expiry information. A qualification with an unchecked date does not expire for admission.
+
+Settings writes require `suppliers.administration.update`. Applicant routes require a session and operate on the caller's supplier. Only the designated reviewer may decide. Directory viewers must not receive submission snapshots, review events or file content.
+
+The review assistant is restricted to the designated reviewer and a pending application. `reviewBrief` reruns the existing admission evaluator against the latest submission snapshot and current proposed qualifications; it exposes rule, qualification, file and previous return event IDs as evidence. Its `contentVerified=false` means neither the attachment body nor its authenticity was checked. AI text uses the Agents model gateway and is advisory; the absence of an enabled chat model leaves the deterministic brief available. Generated notes are editable and the AI has no business write tool. The detail page confirms a return with the final note, refreshes the supplier before sending, and supplies `expectedVersion` for the server's stale-state guard.
